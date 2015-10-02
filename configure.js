@@ -6,10 +6,13 @@ var path = require('path')
 
 generateProject(_ => {
 
-    _.collectSeq("all", _ => {
+  _.collectSeq("compile", _ => {
         _.cmd("./node_modules/.bin/webpack")
   })
 
+  _.collectSeq("all", _ => {
+        _.cmd("npm run start")
+  })
 
   _.collect("update", _ => {
     _.cmd("make clean && ./node_modules/.bin/babel configure.js | node")
