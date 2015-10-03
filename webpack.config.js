@@ -10,6 +10,9 @@ module.exports = {
             test: /\.js[x]?$/,
             exclude: /(node_modules|bower_components)/,
             loader: 'babel'
+        }, {
+            test: /\.css$/, // Only .css files
+            loader: 'style!css' // Run both loaders
         }]
     },
     resolve: {

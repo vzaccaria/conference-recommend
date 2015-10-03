@@ -1,9 +1,10 @@
 import React from 'react';
 var _ = require('lodash');
-
 var StyleSheet = require('react-style');
 
-var shadowDepth = '1px';
+import './custom.css'
+import './skeleton/css/normalize.css';
+import './skeleton/css/skeleton.css';
 
 function shadowHelper(level) {
     var r = ""
@@ -23,11 +24,11 @@ var styles = StyleSheet.create({
         media: {
             display: 'flex',
             alignItems: 'flex-start',
-            width: '400px',
-            margin: '1rem',
             boxShadow: shadowHelper(1),
+            marginBottom: '2rem',
             image: {
-                maxWidth: '33%'
+                maxHeight: '10rem',
+                maxWidth: '50%'
             },
             body: {
                 flex: '1'
@@ -35,6 +36,10 @@ var styles = StyleSheet.create({
         }
     }
 });
+
+function getBody(it) {
+    return <p style={styles.root.media.body}> {it.name} </p>
+}
 
 function getPicture(it) {
     var url =  `https:\/\/${it.url}`;
@@ -47,20 +52,23 @@ function getPicture(it) {
 
 function getObjects(data) {
     return _.map(data, (it, k) => {
-        return <div style={styles.root.media} key={k}>
-        {getPicture(it)}
-        <p styles={styles.root.media.body} >
-            {it.name}
-        </p>
-        </div >
+        return <div key={k} className="one-half column">
+        <div style={styles.root.media}>
+            {getPicture(it)}
+            {getBody(it)}
+            </div>
+        </div>;
     })
 }
 
 
 function getMedia(state) {
-    return <div>
-            {getObjects(state.mapData)}
-    </div>
+    var chunked = _.chunk(state.mapData, 2);
+    return <div> {_.map(chunked, (c) => {
+        return <div className="row">
+            {getObjects(c)}
+        </div>
+    })} </div>
 }
 
 module.exports = { getMedia }
