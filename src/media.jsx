@@ -2,6 +2,8 @@ import React from 'react';
 var _ = require('lodash');
 var StyleSheet = require('react-style');
 
+import { setCurrentPositionFromString } from './state.js'
+
 import './custom.css'
 import './skeleton/css/normalize.css';
 import './skeleton/css/skeleton.css';
@@ -38,11 +40,13 @@ var styles = StyleSheet.create({
 });
 
 function getBody(it) {
-    return <p style={styles.root.media.body}> {it.name} </p>
+    var url =  `https:\/\/${it.url}`;
+    return <p style={styles.root.media.body}> <a href={url}>
+        {it.name} </a>
+    </p>
 }
 
 function getPicture(it) {
-    var url =  `https:\/\/${it.url}`;
     var pict = `https:\/\/${it.picture}`;
 
     if (it.picture !== "") {
@@ -52,8 +56,12 @@ function getPicture(it) {
 
 function getObjects(data) {
     return _.map(data, (it, k) => {
+        var handleClick = function() {
+            console.log('the click was pressed!!')
+            setCurrentPositionFromString(it.coordinates)
+        }
         return <div key={k} className="one-half column">
-        <div style={styles.root.media}>
+        <div style={styles.root.media} onClick={handleClick}>
             {getPicture(it)}
             {getBody(it)}
             </div>

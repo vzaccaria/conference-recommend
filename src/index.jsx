@@ -1,15 +1,8 @@
 import React from 'react';
-import { getTables } from 'mdtable2json';
 var { MyMap } = require('./map.jsx');
 var { getMedia } = require('./media.jsx');
+var { getState } = require('./state.js')
 
-var mapDataMd = require('raw!../data/sightseeing.md');
-
-function getInitialState() {
-    var mapData = getTables(mapDataMd)[0].json;
-    var mapCenterPosition = [45.859809, 9.077989];
-    return { mapData, mapCenterPosition }
-}
 
 function projectState(state) {
     React.render(<MyMap data={state} />, document.getElementById('content'));
@@ -17,7 +10,7 @@ function projectState(state) {
 }
 
 function main() {
-    var state = getInitialState();
+    var state = getState();
     projectState(state);
     setInterval(() => projectState(state), 1000)
 }
