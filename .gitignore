@@ -4,3 +4,5 @@ makefile
 api.md
 src/.tern-port
 /.tern-port
+/assets/bundle.js.map
+assets/*
