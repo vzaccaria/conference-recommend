@@ -27,7 +27,7 @@ function getPlugins() {
 }
 
 module.exports = {
-    entry: './src/index.jsx',
+    entry: './src/js/index.jsx',
     devtool: "source-map",
     output: {
         path: __dirname + '/assets',

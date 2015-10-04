@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/vzaccaria/cfrecommend",
   "dependencies": {
+    "alt": "^0.17.3",
     "bluebird": "^2.9.14",
     "compression-webpack-plugin": "^0.2.0",
     "debug": "^2.1.3",

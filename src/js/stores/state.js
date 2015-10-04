@@ -1,4 +1,4 @@
-var mapDataMd = require('raw!../data/sightseeing.md');
+var mapDataMd = require('raw!../../../data/sightseeing.md');
 import { getTables } from 'mdtable2json';
 
 var mapData = getTables(mapDataMd)[0].json;

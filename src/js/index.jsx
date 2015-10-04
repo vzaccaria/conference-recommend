@@ -1,7 +1,7 @@
 import React from 'react';
-var { MyMap } = require('./map.jsx');
-var { getMedia } = require('./media.jsx');
-var { getState } = require('./state.js')
+var { MyMap }    = require('./components/map.jsx');
+var { getMedia } = require('./components/media.jsx');
+var { getState } = require('./stores/state.js')
 
 
 function projectState(state) {

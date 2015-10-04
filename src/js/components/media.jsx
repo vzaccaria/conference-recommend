@@ -2,11 +2,11 @@ import React from 'react';
 var _ = require('lodash');
 var StyleSheet = require('react-style');
 
-import { setCurrentPositionFromString } from './state.js'
+import { setCurrentPositionFromString } from '../stores/state.js'
 
-import './custom.css'
-import './skeleton/css/normalize.css';
-import './skeleton/css/skeleton.css';
+import '../../css/custom.css'
+import '../../css/skeleton/css/normalize.css';
+import '../../css/skeleton/css/skeleton.css';
 
 function shadowHelper(level) {
     var r = ""
