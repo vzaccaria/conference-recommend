@@ -1,18 +1,10 @@
 import React from 'react';
 var { MyMap }    = require('./components/map.jsx');
-var { getMedia } = require('./components/media.jsx');
-var { getState } = require('./stores/state.js')
-
-
-function projectState(state) {
-    React.render(<MyMap data={state} />, document.getElementById('content'));
-    React.render(getMedia(state), document.getElementById('media'));
-}
+var { MyMedia } = require('./components/media.jsx');
 
 function main() {
-    var state = getState();
-    projectState(state);
-    setInterval(() => projectState(state), 1000)
+    React.render(<MyMap />, document.getElementById('content'));
+    React.render(<MyMedia />, document.getElementById('media'));
 }
 
 main()

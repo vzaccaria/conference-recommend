@@ -2,7 +2,8 @@ import React from 'react';
 var _ = require('lodash');
 var StyleSheet = require('react-style');
 
-import { setCurrentPositionFromString } from '../stores/state.js'
+import SelectedLocationStore from '../stores/SelectedLocationStore.js';
+import SelectedLocationActions from '../actions/SelectedLocationActions.js';
 
 import '../../css/custom.css'
 import '../../css/skeleton/css/normalize.css';
@@ -42,7 +43,7 @@ var styles = StyleSheet.create({
 function getBody(it) {
     var url =  `https:\/\/${it.url}`;
     return <p style={styles.root.media.body}> <a href={url}>
-        {it.name} </a>
+    {it.name} </a>
     </p>
 }
 
@@ -57,26 +58,43 @@ function getPicture(it) {
 function getObjects(data) {
     return _.map(data, (it, k) => {
         var handleClick = function() {
-            console.log('the click was pressed!!')
-            setCurrentPositionFromString(it.coordinates)
+            SelectedLocationActions.updateMapCenter(it.coordinates)
         }
         return <div key={k} className="one-half column">
         <div style={styles.root.media} onClick={handleClick}>
             {getPicture(it)}
             {getBody(it)}
-            </div>
+        </div>
         </div>;
     })
 }
 
+var MyMedia = React.createClass({
+    /* Bind the state of this component to the SelectedLocationStore's one */
+    getInitialState() {
+        return SelectedLocationStore.getState();
+    },
+    onSelectedLocationStoreChange(state) {
+        this.setState(state)
+    },
+    componentDidMount: function() {
+        SelectedLocationStore.listen(this.onSelectedLocationStoreChange);
+    },
 
-function getMedia(state) {
-    var chunked = _.chunk(state.mapData, 2);
-    return <div> {_.map(chunked, (c) => {
-        return <div className="row">
-            {getObjects(c)}
+    componentWillUnmount: function() {
+        SelectedLocationStore.unlisten(this.onSelectedLocationStoreChange);
+    },
+
+    render: function() {
+        var chunked = _.chunk(this.state.mapData, 2);
+        return <div> {_.map(chunked, (c) => {
+                      return <div className="row">
+                      {getObjects(c)}
+                      </div>
+                      })}
         </div>
-    })} </div>
-}
+    }
+})
 
-module.exports = { getMedia }
+
+module.exports = { MyMedia }
