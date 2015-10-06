@@ -17,12 +17,19 @@ class SelectedLocationStore {
         this.bindListeners({
             handleUpdateMapCenter: SelectedLocationActions.UPDATE_MAP_CENTER,
             handleUpdateCurrentLocation: SelectedLocationActions.UPDATE_CURRENT_LOCATION
+            handleUpdateMapCenterWithZoom: SelectedLocationActions.UPDATE_MAP_CENTER_WITH_ZOOM,
+            handleUpdateCurrentLocation: SelectedLocationActions.UPDATE_CURRENT_LOCATION,
         });
     }
 
     /* Location is an array of two floats */
     handleUpdateMapCenter(location) {
         this.mapCenterPosition = location;
+    }
+
+    handleUpdateMapCenterWithZoom(data) {
+        this.mapCenterPosition = data[0];
+        this.mapCenterZoom = data[1];
     }
 
     /* Location is an array of two floats */

@@ -34,24 +34,50 @@ var styles = StyleSheet.create({
                 maxWidth: '50%'
             },
             body: {
+                linkSection: {
+                    paddingTop: '0.5rem'
+                },
+                title: {
+                    marginTop: '0.5rem'
+                },
+                textAlign: 'center',
+                paddingLeft: "1rem",
                 flex: '1'
             }
         }
     }
 });
 
+var mediaObject = styles.root.media;
+
+function getIcon(url, name) {
+    var nn = `fa fa-stack-1x fa-inverse fa-${name}`
+    return (
+        <a href={url}>
+            <span className="fa-stack fa-lg">
+                <i className="fa fa-circle fa-stack-2x"/>
+                <i className={nn}/>
+            </span>
+        </a>
+    );
+}
+
 function getBody(it) {
-    var url =  `https:\/\/${it.url}`;
-    return <p style={styles.root.media.body}> <a href={url}>
-    {it.name} </a>
-    </p>
+    return (
+        <div style={mediaObject.body}>
+            <div style={mediaObject.body.title}> {it.name} </div>
+            <div style={mediaObject.body.linkSection}>
+                {getIcon(it.url, "map-marker")}
+                {getIcon(it.url, "tripadvisor")}
+                {getIcon(it.url, "laptop")}
+            </div>
+        </div>
+    );
 }
 
 function getPicture(it) {
-    var pict = `https:\/\/${it.picture}`;
-
     if (it.picture !== "") {
-        return <img style={styles.root.media.image}  src={pict} alt={pict}/>
+        return <img style={mediaObject.image}  src={it.picture} alt={it.picture}/>
     }
 }
 
@@ -60,11 +86,11 @@ function getObjects(data) {
         var handleClick = function() {
             SelectedLocationActions.updateMapCenter(it.coordinates)
         }
-        return <div key={k} className="one-half column">
-        <div style={styles.root.media} onClick={handleClick}>
-            {getPicture(it)}
-            {getBody(it)}
-        </div>
+        return <div key={k} className="one-half column clickable">
+            <div style={mediaObject} onClick={handleClick}>
+                {getPicture(it)}
+                {getBody(it)}
+            </div>
         </div>;
     })
 }
@@ -97,4 +123,4 @@ var MyMedia = React.createClass({
 })
 
 
-module.exports = { MyMedia }
+    module.exports = { MyMedia }

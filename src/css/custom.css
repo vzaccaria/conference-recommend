@@ -4,6 +4,10 @@ body {
     font-family: Helvetica Neue;
 }
 
+.clickable:hover {
+    cursor: pointer;
+}
+
 
 h1,
 h2,
