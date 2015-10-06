@@ -67,12 +67,17 @@ function getIcon(url, name) {
     );
 }
 
+function gmapLocationURL(it) {
+    return `https://www.google.com/maps?saddr=My+Location&daddr=${it.coordinates[0]},${it.coordinates[1]}`;
+
+}
+
 function getBody(it) {
     return (
         <div style={mediaObject.body}>
             <div style={mediaObject.body.title}> {it.name} </div>
             <div style={mediaObject.body.linkSection}>
-                {getIcon(it.url, "map-marker")}
+                {getIcon(gmapLocationURL(it), "google")}
                 {getIcon(it.url, "tripadvisor")}
                 {getIcon(it.url, "laptop")}
             </div>
