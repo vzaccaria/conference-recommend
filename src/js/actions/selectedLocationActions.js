@@ -13,6 +13,9 @@ class SelectedLocationActions {
         this.dispatch({currentLocation, currentLocationAccuracy});
     }
 
+    updateShownTags({type, tag}) {
+        this.dispatch({type, tag});
+    }
 }
 
-module.exports = alt.createActions(SelectedLocationActions);
+module.exports = window.$a = alt.createActions(SelectedLocationActions);

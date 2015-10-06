@@ -9,6 +9,11 @@ import '../../css/custom.css'
 import '../../css/skeleton/css/normalize.css';
 import '../../css/skeleton/css/skeleton.css';
 
+import _debug from 'debug';
+_debug.enable('app:*');
+const debug = _debug('app:components/media.jsx');
+
+
 function shadowHelper(level) {
     var r = ""
     switch(level) {
@@ -81,7 +86,11 @@ function getPicture(it) {
     }
 }
 
-function getObjects(data) {
+function getObjects(data, state) {
+    data = _.filter(data, (it) => {
+        debug(_.intersection(it.tags, state.shownTags).length)
+            return _.intersection(it.tags, state.shownTags).length !== 0;
+    });
     return _.map(data, (it, k) => {
         var handleClick = function() {
             SelectedLocationActions.updateMapCenterWithZoom(it.coordinates, 13);
@@ -111,16 +120,16 @@ var MyMedia = React.createClass({
         SelectedLocationStore.unlisten(this.onSelectedLocationStoreChange);
     },
 
-    render: function() {
+    render() {
         var chunked = _.chunk(this.state.mapData, 2);
         return <div> {_.map(chunked, (c) => {
                       return <div className="row">
-                      {getObjects(c)}
+                      {getObjects(c, this.state)}
                       </div>
                       })}
         </div>
     }
-})
+});
 
 
-    module.exports = { MyMedia }
+module.exports = { MyMedia }
