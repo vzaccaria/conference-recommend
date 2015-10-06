@@ -84,7 +84,7 @@ function getPicture(it) {
 function getObjects(data) {
     return _.map(data, (it, k) => {
         var handleClick = function() {
-            SelectedLocationActions.updateMapCenter(it.coordinates)
+            SelectedLocationActions.updateMapCenterWithZoom(it.coordinates, 13);
         }
         return <div key={k} className="one-half column clickable">
             <div style={mediaObject} onClick={handleClick}>

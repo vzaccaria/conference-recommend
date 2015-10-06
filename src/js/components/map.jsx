@@ -5,13 +5,18 @@ import SelectedLocationActions from '../actions/SelectedLocationActions.js';
 
 var _ = require('lodash');
 
+import _debug from 'debug';
+_debug.enable('app:*');
+const debug = _debug('app:components/map.jsx');
+
 function getMarkers(data) {
     return _.map(data, (it, k) => {
-        var v = <CircleMarker center={it.coordinates} key={k}>
-        <Popup>
-            <span> {it.name} </span>
-        </Popup>
-        </CircleMarker>;
+        var v = (
+            <CircleMarker center={it.coordinates} key={k}>
+                <Popup>
+                    <span> {it.name} </span>
+                </Popup>
+            </CircleMarker>);
         return v;
     })
 }
@@ -27,10 +32,10 @@ var MyMap = React.createClass({
     },
 
     componentDidMount: function() {
-        this.map = this.refs.theMap.leafletElement
-        this.turnOnLocation();
-        this.map.on('locationfound', this.onLocationFound);
         SelectedLocationStore.listen(this.onSelectedLocationStoreChange);
+        this.map = this.refs.theMap.leafletElement
+        this.map.on('locationfound', this.onLocationFound);
+        this.turnOnLocation()
     },
 
     componentWillUnmount: function() {
@@ -38,14 +43,15 @@ var MyMap = React.createClass({
     },
 
     turnOnLocation: function() {
-        this.map.locate({setView: true, maxZoom:10})
+        this.map.locate({watch: true, maxZoom:10})
     },
 
     turnOffLocation: function() {
-        this.map.locate({setView: false, zoom:10})
+        this.map.locate({setView: false, watch: false, zoom:10})
     },
 
     onLocationFound: function(e) {
+        debug(`Location found ${JSON.stringify(e.latlng)}`)
         const loc = [ e.latlng.lat, e.latlng.lng ];
         const acc = e.accuracy/2;
         SelectedLocationActions.updateCurrentLocation(loc, acc);
@@ -63,7 +69,7 @@ var MyMap = React.createClass({
         }
     },
     render: function() {
-        return <Map ref="theMap" center={this.state.mapCenterPosition} zoom = {10}>
+        return <Map ref="theMap" center={this.state.mapCenterPosition} zoom={this.state.mapCenterZoom}>
                 <TileLayer url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
