@@ -2,6 +2,8 @@ import React from 'react';
 var _ = require('lodash');
 var StyleSheet = require('react-style');
 
+import { tagStyle, shadowHelper, mixin, smallCaps } from '../mixins';
+
 import SelectedLocationStore from '../stores/SelectedLocationStore.js';
 import SelectedLocationActions from '../actions/SelectedLocationActions.js';
 
@@ -15,35 +17,29 @@ var tagsStyle = StyleSheet.create({
 });
 
 function showTag(t) {
-    var color = 'black';
-    var s = {
-        width: '8rem',
-        color: 'white',
-        backgroundColor: color,
-        borderRadius: '3rem',
-        padding: '1rem',
-        textAlign: 'center',
-        marginRight: '1rem',
-        cursor: 'pointer'
-    }
+    var color = '#00B2DD';
+    var s = tagStyle(color);
 
     if(!_.contains(this.state.shownTags, t)) {
-        s.color = color,
-        s.backgroundColor = 'white'
+        s = tagStyle('gray')
     }
 
-    var tagStyle = StyleSheet.create(s);
+    s = mixin(s, {
+        fontSize: '20px',
+        boxShadow: shadowHelper(1),
+        cursor: 'pointer'
+    });
 
     var handleClick = () => {
         debug('clicked')
-        if(!_.contains(this.state.shownTags, t)) {
-            SelectedLocationActions.updateShownTags({type: "add", tag: t})
-        } else {
-            SelectedLocationActions.updateShownTags({type: "remove", tag: t})
-        }
+            if(!_.contains(this.state.shownTags, t)) {
+                SelectedLocationActions.updateShownTags({type: "add", tag: t})
+            } else {
+                SelectedLocationActions.updateShownTags({type: "remove", tag: t})
+            }
     }
 
-    return (<span onClick={handleClick} style={tagStyle}>{t}</span>);
+    return (<span onClick={handleClick} style={s}>{t}</span>);
 }
 
 
