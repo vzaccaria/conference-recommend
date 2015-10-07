@@ -34,8 +34,8 @@ var MyMap = React.createClass({
     componentDidMount: function() {
         SelectedLocationStore.listen(this.onSelectedLocationStoreChange);
         this.map = this.refs.theMap.leafletElement
-        this.map.on('locationfound', this.onLocationFound);
-        this.turnOnLocation()
+        //this.map.on('locationfound', this.onLocationFound);
+        //this.turnOnLocation()
     },
 
     componentWillUnmount: function() {
