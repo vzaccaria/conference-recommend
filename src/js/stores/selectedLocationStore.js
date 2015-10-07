@@ -11,14 +11,28 @@ import _debug from 'debug';
 _debug.enable('app:*');
 const debug = _debug('app:stores/selectedLocationStore.jsx');
 
+function doMaybe(x, cb) {
+    if(!_.isUndefined(x) && !_.isNull(x) && !(x === "")) {
+        cb(x)
+    }
+}
+
 class SelectedLocationStore {
     constructor() {
         this.mapData = getTables(mapDataMd)[0].json;
 
         this.mapData = _.map(this.mapData, (it) => {
             it.coordinates = JSON.parse(`[${it.coordinates}]`);
-            it.url = `https:\/\/${it.url}`;
-            it.picture = `https:\/\/${it.picture}`
+            doMaybe(it.url, () => {
+               it.url = `https://${it.url}`;
+            })
+            doMaybe(it.tripadvisor, () => {
+               it.tripadvisor = `https:\/\/${it.tripadvisor}`
+            })
+            it.gmap = `https://www.google.com/maps?saddr=My+Location&daddr=${it.coordinates[0]},${it.coordinates[1]}`
+            doMaybe(it.picture, () => {
+                it.picture = `https:\/\/${it.picture}`
+            })
             it.tags = it.tags.split(",").map(_.trim);
             return it
         })

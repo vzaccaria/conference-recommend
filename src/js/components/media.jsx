@@ -52,31 +52,55 @@ var styles = StyleSheet.create({
 
 var mediaObject = styles.root.media;
 
-function getIcon(url, name) {
-    var nn = `fa fa-stack-1x fa-inverse fa-${name}`
+function getIconHTML(color, name) {
+    const nn = `fa fa-stack-1x fa-inverse fa-${name}`
     return (
-        <a href={url}>
-            <span className="fa-stack fa-lg">
-                <i className="fa fa-circle fa-stack-2x"/>
-                <i className={nn}/>
-            </span>
-        </a>
-    );
+        <span style={{color: color}} className="fa-stack fa-lg">
+            <i className="fa fa-circle fa-stack-2x"/>
+            <i className={nn}/>
+        </span>);
 }
 
-function gmapLocationURL(it) {
-    return `https://www.google.com/maps?saddr=My+Location&daddr=${it.coordinates[0]},${it.coordinates[1]}`;
+function getIcon(url, name) {
+    if(_.isFunction(url)) {
+        return (<span styles={{cursor: 'pointer'}} onClick={url}>{getIconHTML('#00B2DD', name)}</span>)
+    } else {
+        if(url !== "") {
+            return (<a href={url}>{getIconHTML('#00B2DD', name)}</a>);}
+        else {
+            return (<span>{getIconHTML('gray', name)}</span>)
+        }
+    }
+}
+
+function getTags(it) {
+    var ts =tagStyle("#00B2DD");
+    return _.map(it.tags, (t) => {
+        return (
+            <div style={ts}>
+                {t}
+            </div>
+        );
+    })}
+
+function getLinks(it) {
+    var clickHandler = () => {SelectedLocationActions.updateMapCenterWithZoom(it.coordinates, 13)}
+    return [ getIcon(clickHandler, "map-marker"),
+             getIcon(it.gmap, "google"),
+             getIcon(it.tripadvisor, "tripadvisor"),
+             getIcon(it.url, "laptop") ]
 
 }
 
 function getBody(it) {
     return (
-        <div style={mediaObject.body}>
+        <div style={mixin(mediaObject.body, smallCaps(500))}>
             <div style={mediaObject.body.title}> {it.name} </div>
             <div style={mediaObject.body.linkSection}>
-                {getIcon(gmapLocationURL(it), "google")}
-                {getIcon(it.url, "tripadvisor")}
-                {getIcon(it.url, "laptop")}
+                {getLinks(it)}
+            </div>
+            <div>
+                {getTags(it)}
             </div>
         </div>
     );
@@ -94,11 +118,8 @@ function getObjects(data, state) {
             return _.intersection(it.tags, state.shownTags).length !== 0;
     });
     return _.map(data, (it, k) => {
-        var handleClick = function() {
-            SelectedLocationActions.updateMapCenterWithZoom(it.coordinates, 13);
-        }
-        return <div key={k} className="one-half column clickable">
-            <div style={mediaObject} onClick={handleClick}>
+        return <div key={k} className="one-half column">
+            <div style={mediaObject}>
                 {getPicture(it)}
                 {getBody(it)}
             </div>
