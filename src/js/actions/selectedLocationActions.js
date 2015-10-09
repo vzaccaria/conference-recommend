@@ -13,6 +13,10 @@ class SelectedLocationActions {
         this.dispatch({currentLocation, currentLocationAccuracy});
     }
 
+    updateMedia({media, orientation}) {
+        this.dispatch({media, orientation});
+    }
+
     updateShownTags({type, tag}) {
         this.dispatch({type, tag});
     }
