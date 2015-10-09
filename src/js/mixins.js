@@ -1,4 +1,5 @@
 var _ = require('lodash')
+var StyleSheet = require('react-style');
 
 let mixin = _.merge
 
@@ -23,6 +24,16 @@ function tagStyle(color = 'black') {
     }, smallCaps('white', 500))
 }
 
+let _brk_mobile = "800px"
+
+function hideOnMobile(media, orientation) {
+    if(media === 'mobile') {
+        return { display: 'none' }
+    } else {
+        return { }
+    }
+}
+
 function shadowHelper(level) {
     var r = ""
     switch(level) {
@@ -40,5 +51,5 @@ function shadowHelper(level) {
 
 
 module.exports = {
-    smallCaps, mixin, tagStyle, shadowHelper
+    smallCaps, mixin, tagStyle, shadowHelper, hideOnMobile
 }
