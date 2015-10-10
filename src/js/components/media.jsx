@@ -2,7 +2,7 @@ import React from 'react';
 var _ = require('lodash');
 var StyleSheet = require('react-style');
 
-import { tagStyle, shadowHelper, mixin, smallCaps } from '../mixins';
+import { hideOnMobile, tagStyle, shadowHelper, mixin, smallCaps } from '../mixins';
 
 import SelectedLocationStore from '../stores/SelectedLocationStore.js';
 import SelectedLocationActions from '../actions/SelectedLocationActions.js';
@@ -23,34 +23,39 @@ function _v(x) {
     }
 }
 
+function mediaObjectStyle(state) {
 
-var styles = StyleSheet.create({
-    root: {
-        media: {
-            display: 'flex',
-            alignItems: 'flex-start',
-            boxShadow: shadowHelper(1),
-            marginBottom: '2rem',
-            image: {
-                maxHeight: '10rem',
-                maxWidth: '50%'
+    let style = {
+        display: 'flex',
+        alignItems: 'flex-start',
+        picture: {
+            maxHeight: '10rem',
+            maxWidth: '50%'
+        },
+        body: {
+            linkSection: {
+                paddingTop: '0.5rem'
             },
-            body: {
-                linkSection: {
-                    paddingTop: '0.5rem'
-                },
-                title: {
-                    marginTop: '0.5rem'
-                },
-                textAlign: 'center',
-                paddingLeft: "1rem",
-                flex: '1'
-            }
+            title: {
+                marginTop: '0.5rem'
+            },
+            textAlign: 'center',
+            paddingLeft: "1rem",
+            flex: '1'
         }
     }
-});
-
-var mediaObject = styles.root.media;
+    if(state.media !== 'mobile') {
+        style = mixin(style, {
+            boxShadow: shadowHelper(1),
+            marginBottom: '2rem'
+        })
+    } else {
+        style = mixin(style, {
+            borderBottom: '1px solid rgba(0,0,0,0.1)',
+        })
+    }
+    return style;
+}
 
 function getIconHTML(color, name) {
     const nn = `fa fa-stack-1x fa-inverse fa-${name}`
@@ -73,58 +78,83 @@ function getIcon(url, name) {
     }
 }
 
-function getTags(it) {
-    var ts =tagStyle("#00B2DD");
-    return _.map(it.tags, (t) => {
+
+function renderState(state) {
+
+    let renderTags = (it) => {
+        var ts = tagStyle("#00B2DD");
+        return _.map(it.tags, (t) => {
+            return (
+                <div styles={ts}>
+                    {t}
+                </div>
+            );
+        })}
+
+
+    let renderLinks = (it) => {
+        var clickHandler = () => {SelectedLocationActions.updateMapCenterWithZoom(it.coordinates, 13)}
+        var links = [
+            getIcon(it.gmap, "google"),
+            getIcon(it.tripadvisor, "tripadvisor"),
+            getIcon(it.url, "laptop")
+        ]
+        if(state.media !== 'mobile') {
+            links = [ getIcon(clickHandler, "map-marker"), ...links ]
+        }
+        return links;
+    }
+
+    let renderBody = (it) => {
         return (
-            <div style={ts}>
-                {t}
+            <div style={mixin(mediaObjectStyle(state).body, smallCaps(500))}>
+                <div style={mediaObjectStyle(state).body.title}> {it.name} </div>
+                <div style={mediaObjectStyle(state).body.linkSection}>
+                    {renderLinks(it)}
+                </div>
+                <div styles={hideOnMobile(state)}>
+                    {renderTags(it)}
+                </div>
             </div>
         );
-    })}
+    }
 
-function getLinks(it) {
-    var clickHandler = () => {SelectedLocationActions.updateMapCenterWithZoom(it.coordinates, 13)}
-    return [ getIcon(clickHandler, "map-marker"),
-             getIcon(it.gmap, "google"),
-             getIcon(it.tripadvisor, "tripadvisor"),
-             getIcon(it.url, "laptop") ]
 
-}
+    let renderPicture = (it) => {
+        if (it.picture !== "") {
+            return <img style={mediaObjectStyle(state).picture} src={it.picture} alt={it.picture}/>
+        }
+    }
 
-function getBody(it) {
+    let renderObjects = (data) => {
+        data = _.filter(data, (it) => {
+            debug(_.intersection(it.tags, state.shownTags).length)
+                return _.intersection(it.tags, state.shownTags).length !== 0;
+        });
+        return _.map(data, (it, k) => {
+            return (
+                <div key={k} className="one-half column">
+                    <div style={mediaObjectStyle(state)}>
+                        {renderPicture(it)}
+                        {renderBody(it)}
+                    </div>
+                </div>
+            );
+        });
+    }
+
+    let renderChunk = (chunk) => {
+        return <div className="row">
+                    {renderObjects(chunk)}
+        </div>
+    }
+
+    var chunked = _.chunk(state.mapData, 2);
     return (
-        <div style={mixin(mediaObject.body, smallCaps(500))}>
-            <div style={mediaObject.body.title}> {it.name} </div>
-            <div style={mediaObject.body.linkSection}>
-                {getLinks(it)}
-            </div>
-            <div>
-                {getTags(it)}
-            </div>
+        <div className="container" >
+            {_.map(chunked, renderChunk)}
         </div>
     );
-}
-
-function getPicture(it) {
-    if (it.picture !== "") {
-        return <img style={mediaObject.image}  src={it.picture} alt={it.picture}/>
-    }
-}
-
-function getObjects(data, state) {
-    data = _.filter(data, (it) => {
-        debug(_.intersection(it.tags, state.shownTags).length)
-            return _.intersection(it.tags, state.shownTags).length !== 0;
-    });
-    return _.map(data, (it, k) => {
-        return <div key={k} className="one-half column">
-            <div style={mediaObject}>
-                {getPicture(it)}
-                {getBody(it)}
-            </div>
-        </div>;
-    })
 }
 
 var MyMedia = React.createClass({
@@ -144,13 +174,7 @@ var MyMedia = React.createClass({
     },
 
     render() {
-        var chunked = _.chunk(this.state.mapData, 2);
-        return <div> {_.map(chunked, (c) => {
-                      return <div className="row">
-                      {getObjects(c, this.state)}
-                      </div>
-                      })}
-        </div>
+        return renderState(this.state)
     }
 });
 

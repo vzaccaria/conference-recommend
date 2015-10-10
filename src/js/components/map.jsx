@@ -2,6 +2,8 @@ import React from 'react';
 import { CircleMarker, Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import SelectedLocationStore from '../stores/SelectedLocationStore.js';
 import SelectedLocationActions from '../actions/SelectedLocationActions.js';
+import { hideOnMobile, tagStyle, shadowHelper, mixin, smallCaps } from '../mixins';
+
 
 var _ = require('lodash');
 
@@ -52,7 +54,7 @@ var MyMap = React.createClass({
 
     onLocationFound: function(e) {
         debug(`Location found ${JSON.stringify(e.latlng)}`)
-        const loc = [ e.latlng.lat, e.latlng.lng ];
+            const loc = [ e.latlng.lat, e.latlng.lng ];
         const acc = e.accuracy/2;
         SelectedLocationActions.updateCurrentLocation(loc, acc);
     },
@@ -69,13 +71,14 @@ var MyMap = React.createClass({
         }
     },
     render: function() {
-        return <Map ref="theMap" center={this.state.mapCenterPosition} zoom={this.state.mapCenterZoom}>
-                <TileLayer url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
-                           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                />
+        return (
+        <div styles={hideOnMobile(this.state)}>
+            <Map ref="theMap" center={this.state.mapCenterPosition} zoom={this.state.mapCenterZoom}>
+                <TileLayer url='http://{s}.tile.osm.org/{z}/{x}/{y}.png' attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' />
                 {getMarkers(this.state.mapData)}
                 {this.getCurrentLocationmarker()}
-        </Map>;
+            </Map>
+        </div>);
     }
 });
 

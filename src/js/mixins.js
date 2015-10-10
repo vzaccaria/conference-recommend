@@ -3,6 +3,12 @@ var StyleSheet = require('react-style');
 
 let mixin = _.merge
 
+function upperCase() {
+    return {
+        textTransform: 'uppercase'
+    }
+}
+
 function smallCaps(color = 'black', weight = 500) {
     return {
         fontVariant: "small-caps",
@@ -26,23 +32,37 @@ function tagStyle(color = 'black') {
 
 let _brk_mobile = "800px"
 
-function hideOnMobile(media, orientation) {
-    if(media === 'mobile') {
-        return { display: 'none' }
+function hideOnMobile({media}) {
+    if (media === 'mobile') {
+        return {
+            display: 'none'
+        }
     } else {
-        return { }
+        return {}
     }
 }
 
 function shadowHelper(level) {
     var r = ""
-    switch(level) {
-        case 1: r = '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'; break;
-        case 2: r = '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'; break;
-        case 3: r = '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)'; break;
-        case 4: r = '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)'; break;
-        case 5: r = '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)'; break;
-        default:r = '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)'; break;
+    switch (level) {
+        case 1:
+            r = '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)';
+            break;
+        case 2:
+            r = '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)';
+            break;
+        case 3:
+            r = '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)';
+            break;
+        case 4:
+            r = '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)';
+            break;
+        case 5:
+            r = '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)';
+            break;
+        default:
+            r = '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)';
+            break;
     }
     return r;
 }
@@ -51,5 +71,5 @@ function shadowHelper(level) {
 
 
 module.exports = {
-    smallCaps, mixin, tagStyle, shadowHelper, hideOnMobile
+    smallCaps, mixin, tagStyle, shadowHelper, hideOnMobile, upperCase
 }

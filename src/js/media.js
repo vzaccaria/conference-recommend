@@ -23,7 +23,7 @@ function setupMediaQueries() {
     mqlPortrait.addListener(pListener)
     pListener(mqlPortrait)
 
-    var mqlMobile = window.matchMedia("(max-width: 960px)");
+    var mqlMobile = window.matchMedia("(max-width: 767px)");
 
     function wListener(it) {
         debug(it.matches)
