@@ -17,18 +17,16 @@ var tagsStyle = StyleSheet.create({
 });
 
 function showTag(t) {
-    var color = '#00B2DD';
-    var s = tagStyle(color);
+    var color = 'btn light-blue darken-1'
 
     if(!_.contains(this.state.shownTags, t)) {
-        s = tagStyle('gray')
+        color = `${color} disabled`
     }
 
-    s = mixin(s, {
-        fontSize: '20px',
-        boxShadow: shadowHelper(1),
-        cursor: 'pointer'
-    });
+    let customization = {
+        marginRight: '1rem'
+        }
+
 
     var handleClick = () => {
         debug('clicked')
@@ -39,7 +37,8 @@ function showTag(t) {
             }
     }
 
-    return (<span onClick={handleClick} style={s}>{t}</span>);
+    return (<span onClick={handleClick} className={color} styles={customization} >{t}</span>);
+    //return (<span onClick={handleClick} >{t}</span>);
 }
 
 

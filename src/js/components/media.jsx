@@ -2,6 +2,7 @@ import React from 'react';
 var _ = require('lodash');
 var StyleSheet = require('react-style');
 
+import { mediaLayoutCSS } from '../sizes'
 import { hideOnMobile, tagStyle, shadowHelper, mixin, smallCaps } from '../mixins';
 
 import SelectedLocationStore from '../stores/SelectedLocationStore.js';
@@ -9,7 +10,6 @@ import SelectedLocationActions from '../actions/SelectedLocationActions.js';
 
 import '../../css/custom.css'
 import '../../css/skeleton/css/normalize.css';
-import '../../css/skeleton/css/skeleton.css';
 
 import _debug from 'debug';
 _debug.enable('app:*');
@@ -23,41 +23,7 @@ function _v(x) {
     }
 }
 
-function mediaObjectStyle(state) {
-
-    let style = {
-        display: 'flex',
-        alignItems: 'flex-start',
-        picture: {
-            maxHeight: '10rem',
-            maxWidth: '50%'
-        },
-        body: {
-            linkSection: {
-                paddingTop: '0.5rem'
-            },
-            title: {
-                marginTop: '0.5rem'
-            },
-            textAlign: 'center',
-            paddingLeft: "1rem",
-            flex: '1'
-        }
-    }
-    if(state.media !== 'mobile') {
-        style = mixin(style, {
-            boxShadow: shadowHelper(1),
-            marginBottom: '2rem'
-        })
-    } else {
-        style = mixin(style, {
-            borderBottom: '1px solid rgba(0,0,0,0.1)',
-        })
-    }
-    return style;
-}
-
-function getIconHTML(color, name) {
+function renderIconHTML(color, name) {
     const nn = `fa fa-stack-1x fa-inverse fa-${name}`
     return (
         <span style={{color: color}} className="fa-stack fa-lg">
@@ -66,17 +32,30 @@ function getIconHTML(color, name) {
         </span>);
 }
 
-function getIcon(url, name) {
+function renderIcon(url, name, description) {
     if(_.isFunction(url)) {
-        return (<span styles={{cursor: 'pointer'}} onClick={url}>{getIconHTML('#00B2DD', name)}</span>)
+        return (<span styles={{cursor: 'pointer'}} onClick={url}>{renderIconHTML('#00B2DD', name)}</span>)
     } else {
         if(url !== "") {
-            return (<a href={url}>{getIconHTML('#00B2DD', name)}</a>);}
+            return (<a href={url}>{renderIconHTML('#00B2DD', name)}</a>);}
         else {
-            return (<span>{getIconHTML('gray', name)}</span>)
+            return (<span>{renderIconHTML('gray', name)}</span>)
         }
     }
 }
+
+function renderIconMaterial(url, name, description) {
+    if(_.isFunction(url)) {
+        return (<span styles={{cursor: 'pointer'}} onClick={url}>{description}</span>)
+    } else {
+        if(url !== "") {
+            return (<a href={url}>{description}</a>);}
+        else {
+            return (null)
+        }
+    }
+}
+
 
 
 function renderState(state) {
@@ -93,38 +72,37 @@ function renderState(state) {
 
 
     let renderLinks = (it) => {
-        var clickHandler = () => {SelectedLocationActions.updateMapCenterWithZoom(it.coordinates, 13)}
         var links = [
-            getIcon(it.gmap, "google"),
-            getIcon(it.tripadvisor, "tripadvisor"),
-            getIcon(it.url, "laptop")
+            renderIconMaterial(it.gmap, "google", "directions"),
+            renderIconMaterial(it.tripadvisor, "tripadvisor", "trip advisor"),
+            renderIconMaterial(it.url, "laptop", "website")
         ]
-        if(state.media !== 'mobile') {
-            links = [ getIcon(clickHandler, "map-marker"), ...links ]
-        }
         return links;
     }
 
+//    <div styles={hideOnMobile(state)}>
+//    {renderTags(it)}
+//    </div>
+
     let renderBody = (it) => {
         return (
-            <div style={mixin(mediaObjectStyle(state).body, smallCaps(500))}>
-                <div style={mediaObjectStyle(state).body.title}> {it.name} </div>
-                <div style={mediaObjectStyle(state).body.linkSection}>
+                <div className="card-action" >
                     {renderLinks(it)}
                 </div>
-                <div styles={hideOnMobile(state)}>
-                    {renderTags(it)}
-                </div>
-            </div>
         );
     }
 
+    // return <img style={mediaObjectStyle(state).picture} src={it.picture} alt={it.picture}/>
 
     let renderPicture = (it) => {
         if (it.picture !== "") {
-            return <img style={mediaObjectStyle(state).picture} src={it.picture} alt={it.picture}/>
+            return (<div className="card-image">
+                <img src={it.picture} alt={it.picture}/>
+                </div>);
         }
     }
+
+    //<div className="card" style={mediaObjectStyle(state)}>
 
     let renderObjects = (data) => {
         data = _.filter(data, (it) => {
@@ -132,10 +110,15 @@ function renderState(state) {
                 return _.intersection(it.tags, state.shownTags).length !== 0;
         });
         return _.map(data, (it, k) => {
+            var clickHandler = () => {SelectedLocationActions.updateMapCenterWithZoom(it.coordinates, 13)}
+
             return (
-                <div key={k} className="one-half column">
-                    <div style={mediaObjectStyle(state)}>
+                <div key={k} className="col s12" onClick={clickHandler}>
+                    <div className="card small hoverable">
                         {renderPicture(it)}
+                        <div className="card-content">
+                            <h6>{it.name}</h6>
+                        </div>
                         {renderBody(it)}
                     </div>
                 </div>
@@ -150,9 +133,17 @@ function renderState(state) {
     }
 
     var chunked = _.chunk(state.mapData, 2);
+
+    var getStyle = (state) => {
+        return mixin({
+            }, mediaLayoutCSS(state));
+        }
+
     return (
-        <div className="container" >
+        <div styles={getStyle(state)}>
+        <div >
             {_.map(chunked, renderChunk)}
+        </div>
         </div>
     );
 }

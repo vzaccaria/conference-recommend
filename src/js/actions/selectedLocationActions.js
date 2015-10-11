@@ -20,6 +20,10 @@ class SelectedLocationActions {
     updateShownTags({type, tag}) {
         this.dispatch({type, tag});
     }
+
+    updateScreenSize(s) {
+        this.dispatch(s);
+    }
 }
 
 module.exports = window.$a = alt.createActions(SelectedLocationActions);

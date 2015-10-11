@@ -2,7 +2,8 @@ import React from 'react';
 import { CircleMarker, Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import SelectedLocationStore from '../stores/SelectedLocationStore.js';
 import SelectedLocationActions from '../actions/SelectedLocationActions.js';
-import { hideOnMobile, tagStyle, shadowHelper, mixin, smallCaps } from '../mixins';
+import { hideOnMobile, mixin } from '../mixins';
+import { mapLayoutCSS } from '../sizes';
 
 
 var _ = require('lodash');
@@ -22,6 +23,8 @@ function getMarkers(data) {
         return v;
     })
 }
+
+
 
 var MyMap = React.createClass({
 
@@ -70,15 +73,20 @@ var MyMap = React.createClass({
             return <div></div>
         }
     },
+
+    getStyle: function(state) {
+        return mixin({
+            }, mapLayoutCSS(state), hideOnMobile(state));
+    },
+
     render: function() {
         return (
-        <div styles={hideOnMobile(this.state)}>
-            <Map ref="theMap" center={this.state.mapCenterPosition} zoom={this.state.mapCenterZoom}>
+            <Map style={this.getStyle(this.state)} ref="theMap" center={this.state.mapCenterPosition} zoom={this.state.mapCenterZoom}>
                 <TileLayer url='http://{s}.tile.osm.org/{z}/{x}/{y}.png' attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' />
                 {getMarkers(this.state.mapData)}
                 {this.getCurrentLocationmarker()}
             </Map>
-        </div>);
+        );
     }
 });
 

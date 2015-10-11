@@ -42,6 +42,16 @@ function setupMediaQueries() {
     wListener(mqlMobile)
 }
 
+function setupSizeQueries() {
+    function sizeListener(e) {
+        let width = document.documentElement.clientWidth;
+        let height = document.documentElement.clientHeight;
+        SelectedLocationActions.updateScreenSize({ width, height })
+    }
+    window.addEventListener('resize', sizeListener);
+    sizeListener();
+}
+
 module.exports = {
-    setupMediaQueries
+    setupMediaQueries, setupSizeQueries
 }

@@ -20,10 +20,11 @@ generateProject(_ => {
 
     _.collect("deploy", _ => {
         var p = "/Users/zaccaria/development/github/vzaccaria.github.io/cf2016"
+        _.cmd("make compile");
         _.cmd(`mkdir -p ${p}`)
         _.cmd(`cp index.html ${p}`)
         _.cmd(`cp -R ./assets ${p}`)
-        _.cmd(`cd ${p} && ga . && gc -m "cf2016 update" && hub push --all`);
+        _.cmd(`cd ${p} && git add . && git commit -m "cf2016 update" && hub push --all`);
     });
 
   ["major", "minor", "patch"].map(it => {

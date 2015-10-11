@@ -1,7 +1,9 @@
 import React from 'react';
 import SelectedLocationActions from './actions/SelectedLocationActions.js';
 import { upperCase } from './mixins';
-import { setupMediaQueries } from './media'
+import { setupMediaQueries, setupSizeQueries } from './media'
+import 'materialize-css/bin/materialize.css'
+import { mainLayoutCSS } from './sizes'
 
 var { MyMap }   = require('./components/map.jsx');
 var { MyMedia } = require('./components/media.jsx');
@@ -10,22 +12,20 @@ var { MyTags }  = require('./components/tags.jsx');
 
 
 var MyApp= React.createClass({
+
     render() {
         return (
-            <div>
-                <h4 styles={[upperCase(), {textAlign: 'center'}]}>
-                    Computing frontiers 2016 - Como
-                </h4>
-                <MyTags  />
-                <MyMap   />
+            <div style={mainLayoutCSS()}>
                 <MyMedia />
+                <MyMap   />
             </div>
         );
     }
 });
 
 function main() {
-    setupMediaQueries()
+    setupMediaQueries();
+    setupSizeQueries();
     React.render(<MyApp/>, document.getElementById('react-root'));
 }
 

@@ -26,6 +26,8 @@ function getPlugins() {
     }
 }
 
+// 'woff|woff2': 'url-loader?limit=100000',
+//    'ttf|eot': 'file-loader',
 module.exports = {
     entry: './src/js/index.jsx',
     devtool: "source-map",
@@ -42,7 +44,21 @@ module.exports = {
         }, {
             test: /\.css$/, // Only .css files
             loader: 'style!css' // Run both loaders
-        }]
+        }, {
+            test: /\.woff[2]?$/,
+            loader: 'url-loader?limit=100000'
+        }, {
+            test: /\.ttf$/,
+            loader: 'file-loader' // Run both loaders
+        }, {
+            test: /\.eot$/,
+            loader: 'file-loader' // Run both loaders
+        }, {
+            test: /\.svg$/,
+            loader: 'file-loader' // Run both loaders
+        }
+
+                 ]
     },
     resolve: {
         extensions: ['', '.js', '.jsx']

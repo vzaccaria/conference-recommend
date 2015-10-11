@@ -43,12 +43,15 @@ class SelectedLocationStore {
         this.shownTags = _.uniq(_.flatten(_.pluck(this.mapData, 'tags'))) ;
         this.media = 'desktop';
         this.orientation = 'landscape';
+        this.width = 0;
+        this.height = 0;
 
         this.bindListeners({
             handleUpdateMapCenter: SelectedLocationActions.UPDATE_MAP_CENTER,
             handleUpdateMapCenterWithZoom: SelectedLocationActions.UPDATE_MAP_CENTER_WITH_ZOOM,
             handleUpdateCurrentLocation: SelectedLocationActions.UPDATE_CURRENT_LOCATION,
             handleUpdateShownTags: SelectedLocationActions.UPDATE_SHOWN_TAGS,
+            handleUpdateScreenSize: SelectedLocationActions.UPDATE_SCREEN_SIZE,
             handleUpdateMedia: SelectedLocationActions.UPDATE_MEDIA
         });
     }
@@ -79,6 +82,11 @@ class SelectedLocationStore {
         if(!_.isUndefined(orientation)) {
             this.orientation = orientation
         }
+    }
+
+    handleUpdateScreenSize({width, height}) {
+        this.width = width;
+        this.height = height;
     }
 
     handleUpdateShownTags({type, tag}) {
