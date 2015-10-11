@@ -1,8 +1,5 @@
 import React from 'react';
 var _ = require('lodash');
-var StyleSheet = require('react-style');
-
-import { tagStyle, shadowHelper, mixin, smallCaps } from '../mixins';
 
 import SelectedLocationStore from '../stores/SelectedLocationStore.js';
 import SelectedLocationActions from '../actions/SelectedLocationActions.js';
@@ -12,21 +9,14 @@ _debug.enable('app:*');
 const debug = _debug('app:components/tags.jsx');
 
 
-var tagsStyle = StyleSheet.create({
-    textAlign: 'center'
-});
-
 function showTag(t) {
-    var color = 'btn light-blue darken-1'
+    var checked = true
+
+    //var color = 'btn light-blue darken-1'
 
     if(!_.contains(this.state.shownTags, t)) {
-        color = `${color} disabled`
+        checked = false
     }
-
-    let customization = {
-        marginRight: '1rem'
-        }
-
 
     var handleClick = () => {
         debug('clicked')
@@ -37,8 +27,17 @@ function showTag(t) {
             }
     }
 
-    return (<span onClick={handleClick} className={color} styles={customization} >{t}</span>);
-    //return (<span onClick={handleClick} >{t}</span>);
+    return (
+        <li style={{height: '3rem'}} className="collection-item">
+            <div className="col s9"> {t} </div>
+            <div className="col s3 switch">
+                <label>
+                    <input type="checkbox" checked={checked} onClick={handleClick}/>
+                    <span className="lever"></span>
+                </label>
+            </div>
+        </li>
+    );
 }
 
 
@@ -62,7 +61,10 @@ var MyTags = React.createClass({
 
     render: function() {
         return (
-            <div style={tagsStyle} > {_.map(this.state.allTags, showTag.bind(this))}
+            <div className="row">
+                <ul className="collection">
+                    {_.map(this.state.allTags, showTag.bind(this))}
+                </ul>
             </div>
         );
     }

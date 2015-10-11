@@ -10,6 +10,7 @@ import SelectedLocationActions from '../actions/SelectedLocationActions.js';
 
 import '../../css/custom.css'
 import '../../css/skeleton/css/normalize.css';
+import { MyTags } from './tags';
 
 import _debug from 'debug';
 _debug.enable('app:*');
@@ -60,15 +61,15 @@ function renderIconMaterial(url, name, description) {
 
 function renderState(state) {
 
-    let renderTags = (it) => {
-        var ts = tagStyle("#00B2DD");
-        return _.map(it.tags, (t) => {
-            return (
-                <div styles={ts}>
-                    {t}
-                </div>
-            );
-        })}
+//    let renderTags = (it) => {
+//        var ts = tagStyle("#00B2DD");
+//        return _.map(it.tags, (t) => {
+//            return (
+//                <div styles={ts}>
+//                    {t}
+//                </div>
+//            );
+//        })}
 
 
     let renderLinks = (it) => {
@@ -80,15 +81,15 @@ function renderState(state) {
         return links;
     }
 
-//    <div styles={hideOnMobile(state)}>
-//    {renderTags(it)}
-//    </div>
+    //    <div styles={hideOnMobile(state)}>
+    //    {renderTags(it)}
+    //    </div>
 
     let renderBody = (it) => {
         return (
-                <div className="card-action" >
-                    {renderLinks(it)}
-                </div>
+            <div className="card-action" >
+                {renderLinks(it)}
+            </div>
         );
     }
 
@@ -98,7 +99,7 @@ function renderState(state) {
         if (it.picture !== "") {
             return (<div className="card-image">
                 <img src={it.picture} alt={it.picture}/>
-                </div>);
+            </div>);
         }
     }
 
@@ -136,14 +137,16 @@ function renderState(state) {
 
     var getStyle = (state) => {
         return mixin({
-            }, mediaLayoutCSS(state));
-        }
+        }, mediaLayoutCSS(state));
+    }
 
     return (
         <div styles={getStyle(state)}>
-        <div >
-            {_.map(chunked, renderChunk)}
-        </div>
+            <h5> Computing frontiers 2016 </h5>
+            <MyTags> </MyTags>
+            <div >
+                {_.map(chunked, renderChunk)}
+            </div>
         </div>
     );
 }
