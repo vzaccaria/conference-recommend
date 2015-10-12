@@ -28,15 +28,10 @@ function showTag(t) {
     }
 
     return (
-        <li style={{height: '3rem'}} className="collection-item">
-            <div className="col s9"> {t} </div>
-            <div className="col s3 switch">
-                <label>
-                    <input type="checkbox" checked={checked} onClick={handleClick}/>
-                    <span className="lever"></span>
-                </label>
-            </div>
-        </li>
+        <div className="col s6" onClick={handleClick}>
+            <input type="checkbox" checked={checked} />
+            <label>{t}</label>
+        </div>
     );
 }
 
@@ -61,10 +56,10 @@ var MyTags = React.createClass({
 
     render: function() {
         return (
-            <div className="row">
-                <ul className="collection">
-                    {_.map(this.state.allTags, showTag.bind(this))}
-                </ul>
+            <div className="container">
+              <form className="row">
+               {_.map(this.state.allTags, showTag.bind(this))}
+              </form>
             </div>
         );
     }

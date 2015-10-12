@@ -1,4 +1,4 @@
-import SelectedLocationActions from './actions/SelectedLocationActions.js';
+import SelectedLocationActions from './SelectedLocationActions.js';
 import _debug from 'debug';
 _debug.enable('app:*');
 const debug = _debug('app:media.js');

@@ -2,8 +2,7 @@ import React from 'react';
 import { CircleMarker, Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import SelectedLocationStore from '../stores/SelectedLocationStore.js';
 import SelectedLocationActions from '../actions/SelectedLocationActions.js';
-import { hideOnMobile, mixin } from '../mixins';
-import { mapLayoutCSS } from '../sizes';
+import { mapLayoutCSS } from './stateDependentLayout';
 
 
 var _ = require('lodash');
@@ -75,8 +74,7 @@ var MyMap = React.createClass({
     },
 
     getStyle: function(state) {
-        return mixin({
-            }, mapLayoutCSS(state), hideOnMobile(state));
+        return mapLayoutCSS(state);
     },
 
     render: function() {

@@ -1,9 +1,9 @@
 import React from 'react';
 import SelectedLocationActions from './actions/SelectedLocationActions.js';
 import { upperCase } from './mixins';
-import { setupMediaQueries, setupSizeQueries } from './media'
+import { setupMediaQueries, setupSizeQueries } from './actions/mediaQueryActionGenerators'
 import 'materialize-css/bin/materialize.css'
-import { mainLayoutCSS } from './sizes'
+import { mainLayoutCSS } from './components/stateDependentLayout'
 
 var { MyMap }   = require('./components/map.jsx');
 var { MyMedia } = require('./components/media.jsx');

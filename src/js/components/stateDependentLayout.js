@@ -1,4 +1,4 @@
-let xWidth = 300
+let xWidth = 320
 
 let mediaLayoutCSS = () => {
     return {
