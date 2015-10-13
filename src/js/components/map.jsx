@@ -13,8 +13,9 @@ const debug = _debug('app:components/map.jsx');
 
 function getMarkers(data) {
     return _.map(data, (it, k) => {
+        let nm = `marker-${k}`
         var v = (
-            <CircleMarker center={it.coordinates} key={k}>
+            <CircleMarker className={nm} center={it.coordinates} key={k}>
                 <Popup>
                     <span> {it.name} </span>
                 </Popup>

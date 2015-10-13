@@ -1,5 +1,6 @@
 import React from 'react';
 var _ = require('lodash');
+var $ = window.jQuery = require('jquery');
 
 import { mediaLayoutCSS } from './stateDependentLayout'
 import { mixin } from '../mixins';
@@ -17,7 +18,14 @@ import _debug from 'debug';
 _debug.enable('app:*');
 const debug = _debug('app:components/media.jsx');
 
-
+function animate(k) {
+    let s = $(`.marker-${k}`);
+    let cl = s.attr('class');
+    s.attr("class", `${cl} animated flash`);
+    setTimeout( () => {
+        s.attr("class", `${cl}`);
+        }, 1000)
+}
 
 function renderState(state) {
 
@@ -29,7 +37,10 @@ function renderState(state) {
         });
 
         return _.map(data, (it, k) => {
-            var clickHandler = () => {SelectedLocationActions.updateMapCenterWithZoom(it.coordinates, 13)}
+            var clickHandler = () => {
+                SelectedLocationActions.updateMapCenterWithZoom(it.coordinates, 13);
+                animate(k);
+            }
             return (
                 <MediaCard key={k} onClick={clickHandler} data={it} />
             );
