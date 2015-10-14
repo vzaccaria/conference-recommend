@@ -4,6 +4,7 @@ import { upperCase } from './mixins';
 import { setupMediaQueries, setupSizeQueries } from './actions/mediaQueryActionGenerators'
 import 'materialize-css/bin/materialize.css'
 import '../css/animate.css'
+import '../css/custom.css'
 import { mainLayoutCSS } from './components/stateDependentLayout'
 
 var { MyMap }   = require('./components/map.jsx');

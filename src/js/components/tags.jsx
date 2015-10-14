@@ -54,12 +54,40 @@ var MyTags = React.createClass({
         SelectedLocationStore.unlisten(this.onSelectedLocationStoreChange);
     },
 
+    clearAll: function() {
+        _.map(this.state.allTags, (t) => {
+            SelectedLocationActions.updateShownTags({type: "remove", tag: t})
+        })
+    },
+
+    checkAll: function() {
+        _.map(this.state.allTags, (t) => {
+            SelectedLocationActions.updateShownTags({type: "add", tag: t})
+        })
+
+    },
+
     render: function() {
         return (
-            <div className="container">
-              <form className="row">
-               {_.map(this.state.allTags, showTag.bind(this))}
-              </form>
+            <div className="container" style={{marginTop: '1rem !important'}}>
+                <div className="row" style={{marginBottom: '1rem !important'}}>
+                    <div className="col s6">
+                        <a className="btn-flat" onClick={this.checkAll}>
+                            <i className="material-icons">check_box</i>
+                        </a>
+                    </div>
+                    <div className="col s6">
+                        <a className="btn-flat" onClick={this.clearAll}>
+                            <i className="material-icons">check_box_outline_blank</i>
+                        </a>
+
+                    </div>
+                </div>
+                <form className="row">
+
+                    {_.map(this.state.allTags, showTag.bind(this))}
+                </form>
+
             </div>
         );
     }

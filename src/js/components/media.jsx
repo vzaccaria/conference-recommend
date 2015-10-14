@@ -24,7 +24,7 @@ function animate(k) {
     s.attr("class", `${cl} animated flash`);
     setTimeout( () => {
         s.attr("class", `${cl}`);
-        }, 1000)
+    }, 1000)
 }
 
 function renderState(state) {
@@ -32,8 +32,7 @@ function renderState(state) {
     let renderObjects = (data) => {
 
         data = _.filter(data, (it) => {
-            debug(_.intersection(it.tags, state.shownTags).length)
-                return _.intersection(it.tags, state.shownTags).length !== 0;
+            return _.intersection(it.tags, state.shownTags).length !== 0;
         });
 
         return _.map(data, (it, k) => {

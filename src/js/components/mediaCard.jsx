@@ -32,8 +32,8 @@ let renderPicture = (it) => {
     if (it.picture !== "") {
         return (
             <div className="card-image">
-                <img src={it.picture} alt={it.picture} onClick={it.onClick}/>
-                <span style={{background: 'rgba(0,0,0,0.1)'}} className="card-title">{it.name}</span>
+                <img  onClick={it.onClick} className="clickable" src={it.picture} alt={it.picture} />
+                <span onClick={it.onClick} className="clickable card-title" style={{background: 'rgba(0,0,0,0.1)'}} >{it.name}</span>
             </div>);
     }
 }

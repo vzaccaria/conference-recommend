@@ -11,7 +11,11 @@ import _debug from 'debug';
 _debug.enable('app:*');
 const debug = _debug('app:components/map.jsx');
 
-function getMarkers(data) {
+function getMarkers(data, state) {
+    data = _.filter(data, (it) => {
+        return _.intersection(it.tags, state.shownTags).length !== 0;
+    });
+
     return _.map(data, (it, k) => {
         let nm = `marker-${k}`
         var v = (
@@ -82,7 +86,7 @@ var MyMap = React.createClass({
         return (
             <Map style={this.getStyle(this.state)} ref="theMap" center={this.state.mapCenterPosition} zoom={this.state.mapCenterZoom}>
                 <TileLayer url='http://{s}.tile.osm.org/{z}/{x}/{y}.png' attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' />
-                {getMarkers(this.state.mapData)}
+                {getMarkers(this.state.mapData, this.state)}
                 {this.getCurrentLocationmarker()}
             </Map>
         );
