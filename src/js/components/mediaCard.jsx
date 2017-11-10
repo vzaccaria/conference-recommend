@@ -22,7 +22,6 @@ let renderLinks = (it) => {
     var links = [
         renderIconMaterial(it.gmap, "google", "directions"),
         renderIconMaterial(it.tripadvisor, "tripadvisor", "trip advisor"),
-        renderIconMaterial(it.url, "laptop", "website")
     ]
     return links;
 }
